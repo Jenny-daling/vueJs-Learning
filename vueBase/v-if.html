@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue入门</title>
+</head>
+<body>
+    <div id="app">
+        将内容写入页面  双大括号只有放在元素内部才起作用
+        {{msg}}
+        <div v-if="isLogin">用户名是：zdl</div>
+        <div v-else><a href="">请登录</a></div>
+        <div v-if="str=='A'">A</div>
+        <div v-else-if="str=='B'">B</div>
+        <div v-else>B</div>
+
+        v-if 和 v-show的区别是v-if不存在页面上 v-show 是display；none 
+        dom的频繁切换用v-show
+        <div v-show="isLogin">
+            show
+        </div>
+    </div>
+
+    <script src='vue.js'></script>
+    <script>
+        let vm=new Vue({        //vm是一个对象 通过调用对象名可以进行输出 同时由于数据绑定在控制台修改值页面也会随之改变
+            el:'#app',  //引入元素相当于选择器
+            data:{  //包含数据的对象
+                msg:'Hello World',
+                isLogin:false,  //false就不执行该语句 true时才会执行
+                str:'B',
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>directive自定义指令</title>
+    <style>
+        body{
+
+        }
+        .div1{
+            width:100px;
+            height:100px;
+            background: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div v-zhaoling='bg' v-bind:class='aa'>zhaodeling</div>
+        <h1 v-zhaoling='bg2'>网讯</h1>
+
+        <div class="div1" v-drag v-once></div>
+    </div>
+    <script src='./vue.js'></script>
+    <script>
+        Vue.directive('zhaoling',(el,binding,vNode)=>{  //自定义属性与值的绑定 自定义指令
+            console.log(el,binding,vNode);
+            el.style.background=binding.value;
+        });
+        Vue.directive('drag',(el,binding,vNode)=>{
+            el.style.position='absolute';
+            el.onmousedown=function(e){     //实现拖拽 移动事件绑定在作用元素身上时 会跟不上移动步伐 应该绑定在document元素身上
+                let xDis= e.clientX-el.offsetLeft;
+                let yDis= e.clientY-el.offsetTop;
+                document.onmousemove=function(e1){
+                    el.style.left=e1.clientX-xDis+'px';
+                    el.style.top=e1.clientY-yDis+'px';
+                };
+                el.onmouseup=function(){
+                    document.onmousemove=null;
+                };
+            }
+        });
+        Vue.directive('xx',{    //钩子
+            bind:function(){
+                console.log('bind');
+            },
+            inserted:function(){
+                console.log('inserted');
+            },
+            update:function(){
+                console.log('update');
+            },
+            componentUpdate:function(){
+                console.log('componentUpdated');
+            },
+            unbind:function(){
+                console.log('unbind');
+            }
+        })
+        new Vue({
+            el:'#app',
+            data:{
+                bg:'#f00',
+                bg2:'#0f0',
+            }
+        })
+    </script>
+</body>
+</html>

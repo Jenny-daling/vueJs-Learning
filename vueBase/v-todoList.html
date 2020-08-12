@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todoList案例</title>
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        .red{
+            background: #f00;
+        }
+        .add-form{
+            margin:20px 0 ;
+        }
+    </style>
+</head>
+<body>
+    <!-- 通过for循环实现表单的制作 在点击每一行时实现背景变红（难点） 通过传参以及给每个行对象添加背景是否变红的布尔属性进行分离实现解决背景变红的同步问题 
+    在input选项元素中 v-model根据value值进行选择 所以本例中checkedList中存放的是被选中元素的索引 表单被提交页面就会重新刷新那么刚添加的数据就会丢失-->
+    <div id="app" class='text-center'>
+        <h1>todoList案例</h1>
+        <form action="" class="form-inline" @submit.prevent>
+            <div class="form-group">
+                <label for="product-name">商品名称</label>
+                <input type="text" class='form-control' placeholder="请输入商品名称" v-model='keyword'>
+            </div>
+            <button type='submit' class='btn btn-default glyphicon glyphicon-search' @click='search'>搜索</button>
+        </form>
+
+        <form action="" class="form-inline add-form" @submit.prevent>
+            <div class="form-group">
+                <label for="product-name">商品名称</label>
+                <input type="text" class='form-control' id='product-name' placeholder="请输入商品名称" v-model='productName'>
+            </div>
+            <div class="form-group">
+                <label for="product-price">商品价格</label>
+                <input type="number" class='form-control' id='product-price' placeholder="请输入商品价格" v-model.number='productPrice'>
+            </div>
+            <button type='submit' class='btn btn-default glyphicon glyphicon-plus' @click='add'>增加</button>
+        </form>
+    <table class="table table-bordered">
+        <thead>
+            <tr class="danger">
+                <td>选择</td>
+                <td>商品名称</td>
+                <td>商品价格</td>
+                <td>删除</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr @click='select(product)' v-for='(product,index) in productList' :class='product.isRed?"red":""'>
+               <td> <input @click.stop type="checkbox" v-model='checkedList' :value='index'> </td>
+               <td>{{product.productName}}</td>
+               <td>{{product.productPrice}}</td>
+               <td>
+                    <button @click='del(index)' type='button' class='btn btn-warning glyphicon glyphicon-remove'></button> 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button @click='delChecked' class='btn btn-danger btn-xs'>删除选中</button>
+                </td>
+                <td colspan="3">
+                    总价是：{{total}}元
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                productList:[{
+                    productName:'衣服',
+                    productPrice:100,
+                    isRed:false,
+                },{
+                    productName:'鞋子',
+                    productPrice:50,
+                    isRed:false,
+                },{
+                    productName:'帽子',
+                    productPrice:30,
+                    isRed:false,
+                },{
+                    productName:'口红',
+                    productPrice:200,
+                    isRed:false,
+                },{
+                    productName:'护肤品',
+                    productPrice:500,
+                    isRed:false,
+                }],
+                // total:0,       //总价
+                checkedList:[],     //该数组存储被选中框的索引值
+                productName:'',
+                productPrice:0,
+                keyword:'',
+            },
+            methods: {
+                select(product){
+                    // console.log(product);
+                    product.isRed=!product.isRed;
+                },
+                del(index){     //button 在for循环的作用域中可以引用index   单个删除
+                    this.productList.splice(index,1);   //用于删除数据 第一个参数是删除的位置 删除的数量 要替换的值
+                },
+                delChecked(){
+                    this.productList=this.productList.filter((elem,index)=>{    //过滤后给商品列表重新赋予没有被删除的对象
+                        if(!this.checkedList.includes(index)){   //判断每一个索引是否在选中列表里面
+                            return elem;
+                        }
+                    });
+                    this.checkedList=[];
+
+                    // for(let i=0;i<this.checkedList.length;i++){
+                    //     this.productList.splice(this.checkedList[i],1); //该方法不适用于删除多个数据 第二次删除时数组的index会重新排序
+                    // }
+                },
+                add(){
+                    this.productList.push({
+                        productName:this.productName,
+                        productPrice:this.productPrice,
+                        isRed:false,
+                    });
+                    this.productName='';
+                    this.productPrice='0';
+                },
+                search(){
+                    // this.productList= this.productList.filter((elem,index)=>{   //箭头函数中的this指向父级作用域
+                    //     if(elem.productName.includes(this.keyword)){    //这里的this指向vue对象
+                    //         return elem;
+                    //     }
+                    // })
+
+                    this.productList= this.productList.filter(function(elem,index){   //普通函数指向调用它的对象 这里的this指向productList
+                        if(elem.productName.includes(this.keyword)){    
+                            return elem;
+                        }
+                    }.bind(this))   //将上一级的this对象传递给函数 bind绑定this对象 如果使用call会立即执行
+                },
+            },
+            computed: { //计算属性
+                total(){    //只要与此相关的属性发生变化就会重新计算这个属性值
+                    // let sum =0; //初始化总和
+                    // this.productList.filter((elem,index)=>{ //过滤方法参数为过滤条件返回过滤结果 所有结果连成数组
+                    //     // console.log(elem);
+                    //     if(elem.isRed){
+                    //         sum+=elem.productPrice;
+                    //     }
+                    // });
+
+                    // this.productList.forEach((elem,index)=>{    //forEach没有返回值
+                    //     // console.log(elem);
+                    //     if(elem.isRed){
+                    //         sum+=elem.productPrice;
+                    //     }
+                    // });
+                    // return sum;
+
+                    let result=this.productList.reduce((sum,elem)=>{
+                        console.log(sum);
+                        if(elem.isRed){
+                            sum+=elem.productPrice;
+                        }
+                        return sum;
+                    },0)    //reduce进行求和 第一个参数是方法 第二个参数是求和的初始值
+                    return result;
+                },
+            },
+        })
+    </script>
+</body>
+</html>

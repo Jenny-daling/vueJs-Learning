@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>for循环练习</title>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            v-for是Vue中的循环 形如（a，b）in arr 表示该语句循环 内容根据索引而定
+            <li v-for="(item,index) in arr"> 
+                输出索引和值
+                {{index}}  {{item}}
+            </li>
+        </ul>
+        <br>
+        <ul>
+            <li v-for='(a,b) in stuSort'>
+                输出学生姓名和年龄
+                <span> 姓名：{{a.name}}</span>  
+                <span>年龄：{{a.age}}</span> 
+                <span>索引：{{b}}</span>
+                <button @click='showName(a.name)'>showName</button>
+            </li>
+        </ul>
+        <br>
+        <ul>
+            v-for还可以遍历对象的属性 索引就是对象的关键字
+            <li v-for='(value,key) in dog'>
+                {{value}}&nbsp;{{key}}
+            </li>
+        </ul>
+    </div>
+
+    <script src='./vue.js'></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',  //指明作用的元素
+            data:{
+                arr:['html','css','js','vue'],
+                stuList:[
+                    {
+                        name:'zs',
+                        age:18,
+                    },{
+                        name:'lisi',
+                        age:20,
+                    },{
+                        name:'ww',
+                        age:30,
+                    }
+                ],
+                dog:{
+                    name:'wangcai',
+                    age:3,
+                    color:'white',
+                }
+            },
+            computed:{
+                    stuSort(){  //es6中给对象赋予函数值时不可使用箭头
+                        console.log(this);
+                        return this.stuList.sort((a,b)=>{
+                            return b.age-a.age;     //对象排序的方法
+                        });
+                    }
+                },
+            methods:{
+                showName(name){ //通过传参输出学生姓名
+                    console.log(name);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

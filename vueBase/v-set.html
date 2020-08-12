@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>set函数</title>
+</head>
+<body>
+    <div id="app">
+        <button @click='change'>change</button>
+        <ul>
+            <li v-for='(value,index) in arr'>
+                {{value}}
+            </li>
+        </ul>
+    </div>
+
+    <script src='./vue.js'></script>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                arr:['a','b','c','d'],
+            },
+            methods:{
+                change(){
+                    // this.arr[1]='xx';    //通过此方法无法更新视图虽然控制台数据会改变
+                    Vue.set(this.arr,1,'xx');   //set方法可以实现响应式更改
+                    console.log(this.arr[1]);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

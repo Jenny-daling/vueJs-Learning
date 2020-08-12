@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind</title>
+</head>
+<body>
+    <style>
+        .red{
+            background: #f00;
+        }
+    </style>
+    <div id="app">
+        v-bind将变量充当属性值进行连接 v-bind可以简写成：
+        <img v-bind:src="imgUrl" alt="">
+        <button @click='toggle'>toggle</button>
+        <h1 :class='clsName'>唯创网讯</h1>
+        :class='{类名：true or false,……}'
+        <h1 :class='{red:isRed}'>唯创网讯</h1>
+        <h1 :style='styleObj'>hhahhahha</h1>
+    </div>
+    <script src='./vue.js'></script>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                imgUrl:'https://cn.vuejs.org/images/logo.png',
+                clsName:'red',
+                isRed:true,
+                styleObj:{
+                    background:'#0f0',
+                    color:'#f00',
+                }
+            },
+            methods: {
+                toggle(){
+                    this.isRed=!this.isRed;
+                }
+            },
+        })
+    </script>
+</body>
+</html>

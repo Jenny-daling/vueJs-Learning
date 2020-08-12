@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>插槽</title>
+</head>
+<body>
+    <div id="app">
+        登录区：
+        <comp1>
+            <span slot='first'>引用template中的内容</span>
+            <span slot='second'>引用template中的内容</span>
+        </comp1>
+        注册区：
+        <comp1>
+        </comp1>
+    </div>
+    <template id='temp1'>
+        <div>
+            <h1>
+                <slot name='first'>分部分插入 具名插槽</slot>
+            </h1>
+            <form action="">
+                <!-- 用户名：<input type="text">
+                密码：<input type="password"> -->
+                <slot name='second'>vue中自带的标签 占位 不会出现在页面上 使用了该元素 comp1中的内容才会显示在页面上</slot>
+            </form>
+        </div>
+    </template>
+
+    <script src='./vue.js'></script>
+    <script>
+        new Vue({
+            el:'#app',
+            components:{
+                comp1:{     //该名称用于dom元素中传递组件
+                    template:'#temp1',
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

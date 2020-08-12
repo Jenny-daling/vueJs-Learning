@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件</title>
+</head>
+<body>
+    <div id="app">
+        <!-- <weichaung pname='衣服' price='123'></weichaung> -->
+        调用自定义组件绑定的事件添加.native 调用根元素的事件
+        <weichaung @click.native='select(value)' v-for='(value,index) in productList' :pname='value.name' :price='value.price'></weichaung>
+        <username></username>
+        <table>
+            相当于my-row标签
+            <tr is='my-row'></tr>
+        </table>
+    </div>
+    <userName></userName>
+    <script src='./vue.js'></script>
+    <script>
+        Vue.component('weichaung',{         //组件就是自定义标签 可复用的
+            data(){     //自定义组件中的data是一个方法
+                return {};  //返回一个对象相当于返回一个new object
+            },
+            template:`<div>
+                <h1>hshhshsh {{pname}}</h1>
+                <h1>hshhshsh {{price}}</h1>
+            </div>`,        //该部分可以转移在dom结构中引用template进行简化
+            props:['pname','price'],        //此处还可以接收参数 还可以为参数指定类型
+        });
+        Vue.component('my-row',{         //组件就是自定义标签 可复用的 
+            template:`<tr>在table select ol li元素自定义元素会出现错误</tr>`,
+        });
+        new Vue({
+            el:'#app',
+            components:{ //局部自定义组件
+                username:{      //组件名推荐使用小写 如果使用大写 在运用的时候要加- 除此之外组件内部的最外层只能有一个元素 所有元素必须包裹在该元素内部
+                    template:`<input type="text">`,
+                }
+            }, 
+            data:{
+                productList:[{name:'衣服',price:'20'},{name:'裤子',price:'50'}],
+            },
+            methods: {
+                select(value){
+                    console.log(value.price);
+                }
+            },
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件绑定</title>
+</head>
+<body>
+    <style>
+        #div1{
+            width:400px;
+            height:400px;
+            background: #f00;
+        }
+        #div2{
+            width:200px;
+            height:200px;
+            background: #000;
+        }
+    </style>
+    <div id="app">
+        v-on 可以简写成@ 传递事件对象$event  @keyup.13=@keyup.enter
+        <button v-on:click='add(2,$event)'>add</button>
+        <input type="text" @keyup.13="sum($event)" v-model='num'>
+        <h1>{{count}}</h1>
+
+        <div id="div1" @click='clickDiv1'>
+            <div id="div2" @click.stop='clickDiv2($event)'></div>
+        </div>
+
+        <a href="http://www.baidu.com" @click.prevent='bd($event)'>baidu</a>
+    </div>
+
+    <script src='./vue.js'></script>
+    <script>
+    let vm=new Vue({
+        el:'#app',
+        data:{      //data定义基本数据
+            msg:"Hello World",
+            count:0,
+            num:0,
+        },
+        methods:{   //methods定义方法 放置函数 使用vue对象时用this
+            add(n,e){   //e是原生的事件对象
+               this.count+=n;
+               console.log(e);
+            },
+            sum(e){
+                console.log(e.keyCode);
+                // if(e.keyCode==13){
+                    this.count+=parseInt(this.num);
+                // }
+            },
+            clickDiv1(){
+                console.log('div1');
+            },
+            clickDiv2(e){
+                console.log('div2');
+                // e.stopPropagation();
+            },
+            bd(e){
+                // e.preventDefault();
+            }
+        }
+    })
+    </script>
+</body>
+</html>

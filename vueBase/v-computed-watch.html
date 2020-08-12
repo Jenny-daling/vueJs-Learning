@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+</head>
+<body>
+    <!-- <div id="app">
+        <p>Original message:{{ message }}</p>
+        <p>Computed reversed message:"{{reversedMessage}}</p>
+    </div>
+
+    <script src='./vue.js'></script>
+    <script>
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                message:'hello',
+            },
+            computed:{
+                reversedMessage:function(){ //只有当计算属性依赖的属性值发生变化才会重新计算
+                    return this.message.split('').reverse().join('');
+                }
+            }
+        })
+    </script> -->
+
+    <div id="demo">
+        {{firstName}}  {{lastName}}  {{fullName}}
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'#demo',
+            data:{
+                firstName:'Foo',
+                lastName:'Bar',
+                fullName:'Foo Bar',
+            },
+            watch:{ //给属性添加监听器 属性值改变就会触发该函数
+                firstName:function(val){
+                    console.log('firstname change to'+val);
+                    this.fullName=val+' '+this.lastName;
+                },
+                lastName:function(val){
+                    console.log('lastname change to'+val)
+                    this.fullName=this.firstName+''+val;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
